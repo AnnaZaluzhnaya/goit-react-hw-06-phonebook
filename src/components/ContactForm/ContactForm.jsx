@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import style from './ContactForm.module.css';
-import { useDispatch,useSelector} from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { addContacts } from 'redux/slice';
 
 const ContactForm = ({ onSubmit }) => {
@@ -74,6 +74,10 @@ const ContactForm = ({ onSubmit }) => {
       </button>
     </form>
   );
+};
+
+ContactForm.propTypes = {
+  onSubmit: PropTypes.func,
 };
 
 
