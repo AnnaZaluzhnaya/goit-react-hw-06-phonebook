@@ -1,8 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import style from './Filter.module.css';
+import {changeFilter} from 'redux/slice';
+import PropTypes from 'prop-types';
 
-const Filter = ({ value, changeFilter }) => {
+const Filter = () => {
+  const dispatch = useDispatch();
+  const value = useSelector(state => state.contacts.filter);
+
+  const inputChange = event => {
+    const changeValue = event.target.value;
+
+    dispatch(changeFilter(changeValue));
+      
+    };
+  
   return (
     <div className={style.filter}>
       <label>
@@ -12,7 +24,7 @@ const Filter = ({ value, changeFilter }) => {
           type="text"
           name="number"
           value={value}
-          onChange={changeFilter}
+          onChange={inputChange}
         />
       </label>
     </div>
@@ -20,8 +32,7 @@ const Filter = ({ value, changeFilter }) => {
 };
 
 Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  changeFilter: PropTypes.func.isRequired,
+  inputChange: PropTypes.func,
 };
 
 export default Filter;
