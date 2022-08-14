@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 import {
   persistStore,
   persistReducer,
@@ -9,7 +9,7 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import {Slice} from './slice';
+import { contactsSlice } from './slice';
 import storage from 'redux-persist/lib/storage';
 
 const persistConfig = {
@@ -18,20 +18,19 @@ const persistConfig = {
   blacklist: ['filter'],
 };
 
-const persistedReducer = persistReducer(persistConfig, Slice.reducer);
+const persistedReducer = persistReducer(persistConfig, contactsSlice.reducer);
 
 export const store = configureStore({
-    reducer: {
-      contacts: persistedReducer,
+  reducer: {
+    contacts: persistedReducer,
+  },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-      middleware: getDefaultMiddleware =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
-      }),
-      devTools: process.env.NODE_ENV !== 'production',
-  });
-
+    }),
+  devTools: process.env.NODE_ENV !== 'production',
+});
 
 export const persistor = persistStore(store);

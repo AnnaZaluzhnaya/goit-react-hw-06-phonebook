@@ -1,13 +1,18 @@
 import { useState } from 'react';
+import { addContacts } from 'redux/slice';
+import { getContacts } from 'redux/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
+import Notiflix from 'notiflix';
 import style from './ContactForm.module.css';
-import { useDispatch} from 'react-redux';
-import { addContacts } from 'redux/slice';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
 
   const nameInputId = nanoid();
@@ -15,10 +20,14 @@ const ContactForm = ({ onSubmit }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    const contact = { name, number, id: nanoid() };
+    const contactWillAdded = { name, number, id: nanoid() };
 
+    if (contacts.find(contact => contact.name === name)) {
+      Notiflix.Notify.info(`${name} is already in contacts`);
+    } else {
+      dispatch(addContacts(contactWillAdded));
+    }
 
-    dispatch(addContacts(contact));
     setName('');
     setNumber('');
   };
@@ -79,6 +88,5 @@ const ContactForm = ({ onSubmit }) => {
 ContactForm.propTypes = {
   onSubmit: PropTypes.func,
 };
-
 
 export default ContactForm;
