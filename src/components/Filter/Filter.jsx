@@ -11,7 +11,6 @@ const Filter = () => {
 
   const inputChange = event => {
     const changeValue = event.target.value;
-
     dispatch(changeFilter(changeValue));
   };
 
